@@ -8,11 +8,11 @@ You do **NOT** need to carry your phone while exploring. The phone is used only 
 ---
 
 ## 1. Process Wandrer Data
-Process your KML/KMZ exports into optimized tiles:
+Process your KML/KMZ exports into optimized tiles. You can use the provided example file:
 ```bash
 cd phone-app/processor
 npm install
-npx ts-node src/processor.ts <path-to-kml> ../../data/tiles
+npx ts-node src/processor.ts ../../example/wandrer-pinxton-example.kml ../../data/tiles
 ```
 *Tiles for Pinxton are pre-generated in `./data/tiles/15/`.*
 
