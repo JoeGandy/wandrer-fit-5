@@ -1,0 +1,32 @@
+{
+  "string": [
+    {
+      "name": "app_name",
+      "value": "Watch Wandrer"
+    },
+    {
+      "name": "module_desc",
+      "value": "Watch Wandrer Entry Module"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "Main Activity"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "Watch Wandrer"
+    },
+    {
+      "name": "reason_location",
+      "value": "Needed to show your position on the map and record exploration."
+    },
+    {
+      "name": "reason_background",
+      "value": "Needed to keep recording your path while the screen is off."
+    },
+    {
+      "name": "reason_liveview",
+      "value": "Needed to show real-time exploration stats in the system capsule."
+    }
+  ]
+}

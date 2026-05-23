@@ -1,0 +1,32 @@
+{
+  "app": {
+    "signingConfig": "default",
+    "compileSdkVersion": 13,
+    "compatibleSdkVersion": 13,
+    "products": [
+      {
+        "name": "default",
+        "signingConfig": "default",
+        "compileOptions": {
+          "closureOptions": {
+            "removeConsole": false
+          }
+        }
+      }
+    ]
+  },
+  "modules": [
+    {
+      "name": "entry",
+      "srcPath": "./entry",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
+    }
+  ]
+}

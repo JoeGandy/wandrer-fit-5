@@ -1,0 +1,36 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# HarmonyOS / DevEco Studio
+.gradle/
+.idea/
+build/
+ohos/
+.ohos/
+entry/build/
+entry/.cxx/
+entry/.preview/
+debug/
+release/
+*.hap
+*.hsp
+*.app
+
+# Expo / React Native
+.expo/
+dist/
+web-build/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Sensitive / Tiles
+data/tiles/
+*.kml
+*.kmz
+.env

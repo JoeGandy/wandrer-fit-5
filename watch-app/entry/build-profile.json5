@@ -1,0 +1,11 @@
+{
+  "name": "entry",
+  "compileSdkVersion": 13,
+  "compatibleSdkVersion": 13,
+  "runtimeOS": "HarmonyOS",
+  "targets": [
+    {
+      "name": "default"
+    }
+  ]
+}

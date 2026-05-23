@@ -1,0 +1,38 @@
+# Watch Wandrer Project Rules & Context
+
+## Project Overview
+Watch Wandrer is a standalone exploration app for the **HUAWEI WATCH FIT 5** (HarmonyOS 6.1 NEXT / API 13). It allows users to view "Wandrer" overlays (traveled vs untraveled roads) directly on their watch without needing a phone during the activity.
+
+## Tech Stack
+- **Watch App**: ArkTS, HarmonyOS NEXT (API 13).
+  - **Rendering**: High-performance `Drawing SDK` (@kit.ArkGraphics2D).
+  - **Services**: `LiveView Kit` for real-time capsules, `Location Kit` for background tracking.
+  - **Architecture**: MVVM-lite with service-based state management.
+- **Companion App**: React Native (Expo).
+  - **Role**: Pre-processing KML/KMZ data and syncing tiles to the watch.
+- **Data Processor**: Node.js/TypeScript script for tiling Wandrer KML data into optimized JSON tiles.
+
+## Key Architectural Principles
+1. **Standalone Operation**: The watch app must function 100% offline and without a phone connection during an activity.
+2. **High-Performance Rendering**: Use the `Drawing SDK` for map rendering instead of standard Canvas for 60fps performance on the watch.
+3. **Glanceability**: Use `LiveView` capsules to show progress in the system UI.
+4. **Physical Controls**: Support the `Digital Crown` for zooming the map.
+
+## Project Structure
+- `/watch-app`: The HarmonyOS ArkTS project.
+  - `/entry/src/main/ets/components`: UI components (e.g., `DrawingMapRenderer.ets`).
+  - `/entry/src/main/ets/services`: Business logic (Location, Tiles, LiveView).
+  - `/entry/src/main/ets/pages`: Main application screens.
+- `/phone-app/processor`: Node.js tool for converting KML to tiles.
+- `/phone-app/companion`: React Native mobile app for sync.
+- `/data/tiles`: Sandbox for pre-generated map tiles.
+
+## Development Workflow
+- Use **DevEco Studio 5.0+** for HarmonyOS development.
+- Debug via **HDC** (Huawei Device Connector).
+- Deploy tiles to the watch sandbox at: `/data/app/el2/100/base/com.joe.watchwandrer/files/tiles/`.
+
+## Coding Standards
+- Prefer ArkTS idiomatic patterns.
+- Ensure background tasks are correctly registered with `WantAgent`.
+- Keep the map rendering logic in `DrawingMapRenderer.ets` optimized for GPU.

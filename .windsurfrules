@@ -1,0 +1,29 @@
+# Watch Wandrer - Windsurf Context & Rules
+
+## Project Mission
+A standalone "Wandrer" exploration app for the **HUAWEI WATCH FIT 5** (HarmonyOS 6.1 NEXT). It displays traveled vs. untraveled road overlays using optimized vector tiles, allowing for phone-free exploration.
+
+## Tech Stack
+- **Watch App**: ArkTS, HarmonyOS NEXT (API 13 / HarmonyOS 6.1).
+  - Core Kit: `@kit.ArkGraphics2D` (Drawing SDK), `@kit.LiveViewKit`, `@kit.AbilityKit`.
+- **Phone App (Companion)**: React Native / Expo.
+- **Data Pipeline**: Node.js/TS KML-to-Tile processor.
+
+## Critical Knowledge for Agents
+1. **Standalone Design**: The watch app MUST work without a phone during activities. Maps are rendered from local JSON tiles.
+2. **Performance**: Always use `Drawing SDK` (DrawingMapRenderer.ets) for map rendering to ensure 60fps on wearable hardware.
+3. **Hardware Integration**: 
+   - Supports **Digital Crown** for zooming.
+   - Uses **LiveView** capsules for real-time status in the system bar.
+4. **Data Sandbox**: Tiles are stored at `/data/app/el2/100/base/com.joe.watchwandrer/files/tiles/`.
+
+## Directory Map
+- `/watch-app`: ArkTS source code.
+- `/phone-app/processor`: KML processing logic.
+- `/phone-app/companion`: Mobile sync dashboard.
+- `/data/tiles`: Sample processed tile data.
+
+## Development Workflow
+- Deploy via **DevEco Studio 5.0+**.
+- Use `hdc` (Huawei Device Connector) for file transfer and debugging.
+- udev rule (Linux): `SUBSYSTEM=="usb", ATTR{idVendor}=="12d1", MODE="0666", GROUP="plugdev"`.
