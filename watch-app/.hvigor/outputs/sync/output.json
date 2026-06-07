@@ -1,0 +1,125 @@
+{
+  "ohos-module-entry": {
+    "SELECT_TARGET": "default",
+    "MODULE_BUILD_DIR": "/Users/joegandy/projects/wandrer-fit-5/watch-app/entry/build",
+    "TARGETS": {
+      "default": {
+        "SOURCE_ROOT": "/Users/joegandy/projects/wandrer-fit-5/watch-app/entry/src/main",
+        "RESOURCES_PATH": [
+          "/Users/joegandy/projects/wandrer-fit-5/watch-app/entry/src/main/resources"
+        ],
+        "BUILD_PATH": {
+          "OUTPUT_PATH": "/Users/joegandy/projects/wandrer-fit-5/watch-app/entry/build/default/outputs/default",
+          "INTERMEDIA_PATH": "/Users/joegandy/projects/wandrer-fit-5/watch-app/entry/build/default/intermediates",
+          "JS_ASSETS_PATH": "/Users/joegandy/projects/wandrer-fit-5/watch-app/entry/build/default/intermediates/loader_out/default",
+          "JS_LITE_ASSETS_PATH": "/Users/joegandy/projects/wandrer-fit-5/watch-app/entry/build/default/intermediates/loader_out_lite/default",
+          "RES_PATH": "/Users/joegandy/projects/wandrer-fit-5/watch-app/entry/build/default/intermediates/res/default",
+          "RES_PROFILE_PATH": "/Users/joegandy/projects/wandrer-fit-5/watch-app/entry/build/default/intermediates/res/default/resources/base/profile",
+          "ETS_SUPER_VISUAL_PATH": "/Users/joegandy/projects/wandrer-fit-5/watch-app/entry/build/default/cache/default/default@CompileArkTS/esmodule",
+          "JS_SUPER_VISUAL_PATH": "/Users/joegandy/projects/wandrer-fit-5/watch-app/entry/build/default/cache/default/default@CompileJS/jsbundle",
+          "WORKER_LOADER": "/Users/joegandy/projects/wandrer-fit-5/watch-app/entry/build/default/intermediates/loader/default/loader.json",
+          "MANIFEST_JSON": "/Users/joegandy/projects/wandrer-fit-5/watch-app/entry/build/default/intermediates/manifest/default",
+          "OUTPUT_METADATA_JSON": "/Users/joegandy/projects/wandrer-fit-5/watch-app/entry/build/default/intermediates/hap_metadata/default/output_metadata.json",
+          "SOURCE_MAP_DIR": "/Users/joegandy/projects/wandrer-fit-5/watch-app/entry/build/default/intermediates/source_map/default"
+        },
+        "BUILD_OPTION": {
+          "debuggable": true
+        }
+      }
+    },
+    "BUILD_OPTION": {
+      "default-default": {
+        "debuggable": true,
+        "copyFrom": "default",
+        "externalNativeOptions": {
+          "abiFilters": [
+            "arm64-v8a",
+            "x86_64"
+          ]
+        }
+      }
+    },
+    "BUILD_PROFILE_OPT": {
+      "apiType": "stageMode",
+      "buildOption": {
+        "externalNativeOptions": {
+          "abiFilters": [
+            "arm64-v8a",
+            "x86_64"
+          ]
+        }
+      },
+      "targets": [
+        {
+          "name": "default"
+        }
+      ]
+    },
+    "BUILD_CACHE_DIR": ""
+  },
+  "ohos-project": {
+    "SELECT_PRODUCT_NAME": "default",
+    "MODULE_BUILD_DIR": "/Users/joegandy/projects/wandrer-fit-5/watch-app/build",
+    "BUNDLE_NAME": "com.joe.watchwandrer",
+    "BUILD_PATH": {
+      "OUTPUT_PATH": "/Users/joegandy/projects/wandrer-fit-5/watch-app/build/outputs/default"
+    },
+    "MODULES": [
+      {
+        "name": "entry",
+        "srcPath": "/Users/joegandy/projects/wandrer-fit-5/watch-app/entry",
+        "targets": [
+          {
+            "name": "default",
+            "applyToProducts": [
+              "default"
+            ]
+          }
+        ],
+        "belongProjectPath": "/Users/joegandy/projects/wandrer-fit-5/watch-app"
+      }
+    ],
+    "PROFILE_OPT": {
+      "app": {
+        "products": [
+          {
+            "name": "default",
+            "bundleName": "com.joe.watchwandrer",
+            "bundleType": "app",
+            "compileSdkVersion": "6.0.1(21)",
+            "compatibleSdkVersion": "5.0.0(12)",
+            "targetSdkVersion": "6.0.1(21)",
+            "runtimeOS": "HarmonyOS",
+            "arkTSVersion": "1.1",
+            "versionCode": 1000000,
+            "versionName": "1.0.0"
+          }
+        ]
+      },
+      "modules": [
+        {
+          "name": "entry",
+          "srcPath": "./entry",
+          "targets": [
+            {
+              "name": "default",
+              "applyToProducts": [
+                "default"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "CONFIG_PROPERTIES": {
+      "enableSignTask": true,
+      "skipNativeIncremental": false,
+      "hvigor.keepDependency": true
+    },
+    "OVERALL_PROJECT_PATHS": [
+      "/Users/joegandy/projects/wandrer-fit-5/watch-app"
+    ],
+    "BUILD_CACHE_DIR": ""
+  },
+  "version": 1
+}

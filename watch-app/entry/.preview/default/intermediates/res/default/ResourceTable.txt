@@ -1,0 +1,13 @@
+string EntryAbility_desc 0x01000006
+string EntryAbility_label 0x01000007
+string app_name 0x01000008
+string module_desc 0x01000009
+string reason_background 0x0100000a
+string reason_liveview 0x0100000b
+string reason_location 0x0100000c
+color black 0x01000002
+color start_window_background 0x01000003
+color white 0x01000004
+media app_icon 0x01000000
+media icon 0x01000001
+profile main_pages 0x01000005
