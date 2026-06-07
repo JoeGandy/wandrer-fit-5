@@ -1,8 +1,14 @@
 import fs from '@ohos.file.fs';
 import common from '@ohos.app.ability.common';
+import { FeatureCollection, LineString, Position, Feature } from '../models/GeoJson';
 
 export interface TileFeatureProperties {
   status: 'untraveled' | 'traveled' | 'unpaved' | 'achievement' | 'unknown';
+}
+
+export interface TileCoordinates {
+  x: number;
+  y: number;
 }
 
 export class TileService {
@@ -41,7 +47,7 @@ export class TileService {
    * @param x 
    * @param y 
    */
-  public async loadTile(zoom: number, x: number, y: number): Promise<any | null> {
+  public async loadTile(zoom: number, x: number, y: number): Promise<FeatureCollection<LineString, TileFeatureProperties> | null> {
     const tilePath = `${this.tilesDir}/${zoom}/${x}/${y}.json`;
     
     try {
@@ -50,7 +56,7 @@ export class TileService {
       }
 
       const content = fs.readTextSync(tilePath);
-      return JSON.parse(content);
+      return JSON.parse(content) as FeatureCollection<LineString, TileFeatureProperties>;
     } catch (err) {
       console.error(`Failed to load tile ${zoom}/${x}/${y}: ` + JSON.stringify(err));
       return null;
@@ -60,11 +66,11 @@ export class TileService {
   /**
    * Helper to convert lon/lat to tile coordinates
    */
-  public lonLatToTile(lon: number, lat: number, zoom: number): { x: number, y: number } {
+  public lonLatToTile(lon: number, lat: number, zoom: number): TileCoordinates {
     const x = Math.floor((lon + 180) / 360 * Math.pow(2, zoom));
     const latRad = lat * Math.PI / 180;
     const y = Math.floor((1 - Math.log(Math.tan(latRad) + 1 / Math.cos(latRad)) / Math.PI) / 2 * Math.pow(2, zoom));
-    return { x, y };
+    return { x: x, y: y } as TileCoordinates;
   }
 
   /**
@@ -89,26 +95,30 @@ export class TileService {
   }
 
   public seedSampleData(): void {
-    const pinxtonTile = JSON.stringify({
-      "features": [
-        {
-          "type": "Feature",
-          "properties": { "status": "traveled" },
-          "geometry": {
-            "type": "LineString",
-            "coordinates": [[-1.363163,53.100627],[-1.362305,53.100576],[-1.360835,53.100505],[-1.359397,53.100402],[-1.3562,53.100221]]
-          }
-        },
-        {
-          "type": "Feature",
-          "properties": { "status": "untraveled" },
-          "geometry": {
-            "type": "LineString",
-            "coordinates": [[-1.343869,53.094024],[-1.343888,53.094208],[-1.343861,53.094477]]
-          }
-        }
-      ]
-    });
+    const f1: Feature<LineString, TileFeatureProperties> = {
+      type: 'Feature',
+      properties: { status: 'traveled' } as TileFeatureProperties,
+      geometry: {
+        type: 'LineString',
+        coordinates: [[-1.363163, 53.100627], [-1.362305, 53.100576], [-1.360835, 53.100505], [-1.359397, 53.100402], [-1.3562, 53.100221]] as Position[]
+      } as LineString
+    } as Feature<LineString, TileFeatureProperties>;
+
+    const f2: Feature<LineString, TileFeatureProperties> = {
+      type: 'Feature',
+      properties: { status: 'untraveled' } as TileFeatureProperties,
+      geometry: {
+        type: 'LineString',
+        coordinates: [[-1.343869, 53.094024], [-1.343888, 53.094208], [-1.343861, 53.094477]] as Position[]
+      } as LineString
+    } as Feature<LineString, TileFeatureProperties>;
+
+    const fc: FeatureCollection<LineString, TileFeatureProperties> = {
+      type: 'FeatureCollection',
+      features: [f1, f2]
+    } as FeatureCollection<LineString, TileFeatureProperties>;
+
+    const pinxtonTile = JSON.stringify(fc);
 
     // Seed a few tiles around Pinxton
     this.saveTile(15, 16265, 10658, pinxtonTile);

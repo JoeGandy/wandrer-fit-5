@@ -1,5 +1,6 @@
 import { TileService, TileFeatureProperties } from '../services/TileService';
-import { FeatureCollection, LineString } from 'geojson';
+import { LocationService } from '../services/LocationService';
+import { FeatureCollection, LineString } from '../models/GeoJson';
 import common from '@ohos.app.ability.common';
 
 @Component

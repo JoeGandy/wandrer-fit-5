@@ -1,8 +1,8 @@
 {
+  "modelVersion": "6.0.1",
   "name": "watch-wandrer",
   "version": "1.0.0",
   "description": "Watch Wandrer HarmonyOS App",
   "dependencies": {
-    "geojson": "0.5.0"
   }
 }

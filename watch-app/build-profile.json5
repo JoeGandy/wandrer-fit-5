@@ -1,17 +1,17 @@
 {
   "app": {
-    "signingConfig": "default",
-    "compileSdkVersion": 13,
-    "compatibleSdkVersion": 13,
     "products": [
       {
         "name": "default",
-        "signingConfig": "default",
-        "compileOptions": {
-          "closureOptions": {
-            "removeConsole": false
-          }
-        }
+        "bundleName": "com.joe.watchwandrer",
+        "bundleType": "app",
+        "compileSdkVersion": "6.0.1(21)",
+        "compatibleSdkVersion": "6.0.0(20)",
+        "targetSdkVersion": "6.0.1(21)",
+        "runtimeOS": "HarmonyOS",
+        "arkTSVersion": "1.1",
+        "versionCode": 1000000,
+        "versionName": "1.0.0"
       }
     ]
   },

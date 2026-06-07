@@ -1,5 +1,6 @@
-import { TileService } from '../services/TileService';
+import { TileService, TileFeatureProperties } from '../services/TileService';
 import { LocationService } from '../services/LocationService';
+import { FeatureCollection, LineString, Feature, Position } from '../models/GeoJson';
 import common from '@ohos.app.ability.common';
 
 @Component
@@ -30,27 +31,30 @@ export struct SyncPage {
     this.syncStatus = 'Syncing...';
     this.syncProgress = 0;
     
-    // Sample Pinxton Tile Data (subset of generated data)
-    const pinxtonTile = JSON.stringify({
-      "features": [
-        {
-          "type": "Feature",
-          "properties": { "status": "traveled" },
-          "geometry": {
-            "type": "LineString",
-            "coordinates": [[-1.363163,53.100627],[-1.362305,53.100576],[-1.360835,53.100505],[-1.359397,53.100402],[-1.3562,53.100221]]
-          }
-        },
-        {
-          "type": "Feature",
-          "properties": { "status": "untraveled" },
-          "geometry": {
-            "type": "LineString",
-            "coordinates": [[-1.343869,53.094024],[-1.343888,53.094208],[-1.343861,53.094477]]
-          }
-        }
-      ]
-    });
+    const f1: Feature<LineString, TileFeatureProperties> = {
+      type: 'Feature',
+      properties: { status: 'traveled' } as TileFeatureProperties,
+      geometry: {
+        type: 'LineString',
+        coordinates: [[-1.363163, 53.100627], [-1.362305, 53.100576], [-1.360835, 53.100505], [-1.359397, 53.100402], [-1.3562, 53.100221]] as Position[]
+      } as LineString
+    } as Feature<LineString, TileFeatureProperties>;
+
+    const f2: Feature<LineString, TileFeatureProperties> = {
+      type: 'Feature',
+      properties: { status: 'untraveled' } as TileFeatureProperties,
+      geometry: {
+        type: 'LineString',
+        coordinates: [[-1.343869, 53.094024], [-1.343888, 53.094208], [-1.343861, 53.094477]] as Position[]
+      } as LineString
+    } as Feature<LineString, TileFeatureProperties>;
+
+    const fc: FeatureCollection<LineString, TileFeatureProperties> = {
+      type: 'FeatureCollection',
+      features: [f1, f2]
+    } as FeatureCollection<LineString, TileFeatureProperties>;
+
+    const pinxtonTile = JSON.stringify(fc);
 
     const interval = setInterval(() => {
       this.syncProgress += 10;

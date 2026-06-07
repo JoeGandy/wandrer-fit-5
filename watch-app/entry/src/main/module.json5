@@ -62,16 +62,6 @@
           ],
           "when": "inuse"
         }
-      },
-      {
-        "name": "ohos.permission.LIVEVIEW",
-        "reason": "$string:reason_liveview",
-        "usedScene": {
-          "abilities": [
-            "EntryAbility"
-          ],
-          "when": "inuse"
-        }
       }
     ]
   }

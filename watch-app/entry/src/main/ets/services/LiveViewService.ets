@@ -1,4 +1,4 @@
-import { liveViewManager } from '@kit.LiveViewKit';
+// import { liveViewManager } from '@kit.LiveViewKit';
 import { common } from '@kit.AbilityKit';
 import { WantAgent, wantAgent } from '@kit.AbilityKit';
 
@@ -37,6 +37,8 @@ export class LiveViewService {
    * Starts a LiveView for active exploration
    */
   public async startExplorationLiveView(distanceKm: number, roadsFound: number) {
+    console.info('LiveView (Stubbed): Start exploration');
+    /*
     try {
       const wantAgent = await this.getWantAgent();
       
@@ -65,12 +67,15 @@ export class LiveViewService {
     } catch (err) {
       console.error('Failed to start LiveView: ' + JSON.stringify(err));
     }
+    */
   }
 
   /**
    * Updates an existing LiveView with new stats
    */
   public async updateStats(distanceKm: number, roadsFound: number) {
+    console.info('LiveView (Stubbed): Update stats');
+    /*
     try {
       const controller = await liveViewManager.getLiveViewController('exploration');
       const updateData: liveViewManager.LiveViewData = {
@@ -91,12 +96,15 @@ export class LiveViewService {
     } catch (err) {
       console.error('Failed to update LiveView: ' + JSON.stringify(err));
     }
+    */
   }
 
   /**
    * Stops the LiveView when activity ends
    */
   public async stopLiveView() {
+    console.info('LiveView (Stubbed): Stop');
+    /*
     try {
       const controller = await liveViewManager.getLiveViewController('exploration');
       await controller.stop(1);
@@ -104,5 +112,6 @@ export class LiveViewService {
     } catch (err) {
       console.error('Failed to stop LiveView: ' + JSON.stringify(err));
     }
+    */
   }
 }

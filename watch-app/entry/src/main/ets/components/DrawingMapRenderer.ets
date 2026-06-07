@@ -1,6 +1,7 @@
-import { drawing } from '@kit.ArkGraphics2D';
 import { common } from '@kit.AbilityKit';
-import { TileService } from '../services/TileService';
+import { TileService, TileFeatureProperties } from '../services/TileService';
+import { FeatureCollection, LineString, Feature } from '../models/GeoJson';
+import { LocationService } from '../services/LocationService';
 
 @Component
 export struct DrawingMapRenderer {
@@ -12,11 +13,11 @@ export struct DrawingMapRenderer {
 
   @State offsetX: number = 0;
   @State offsetY: number = 0;
-  @State scale: number = 1.0;
+  @State zoomScale: number = 1.0;
   
   private zoom: number = 15;
   private tileService?: TileService;
-  private tileCache: Map<string, any> = new Map();
+  private tileCache: Map<string, FeatureCollection<LineString, TileFeatureProperties>> = new Map();
   private activeTiles: string[] = [];
 
   aboutToAppear() {
@@ -54,11 +55,11 @@ export struct DrawingMapRenderer {
   }
 
   private lonToX(lon: number, width: number): number {
-    return (lon - this.currentLon) * width * 500 * this.scale + width / 2 + this.offsetX;
+    return (lon - this.currentLon) * width * 500 * this.zoomScale + width / 2 + this.offsetX;
   }
 
   private latToY(lat: number, height: number): number {
-    return height / 2 - (lat - this.currentLat) * height * 500 * this.scale + this.offsetY;
+    return height / 2 - (lat - this.currentLat) * height * 500 * this.zoomScale + this.offsetY;
   }
 
   build() {
@@ -73,9 +74,9 @@ export struct DrawingMapRenderer {
           // Watch Fit 5 Crown support for zooming
           const zoomSpeed = 0.05;
           if (event.degree > 0) {
-              this.scale *= (1 + zoomSpeed);
+              this.zoomScale *= (1 + zoomSpeed);
           } else {
-              this.scale *= (1 - zoomSpeed);
+              this.zoomScale *= (1 - zoomSpeed);
           }
           this.renderWithDrawing();
       })
@@ -89,7 +90,7 @@ export struct DrawingMapRenderer {
             }),
           PinchGesture({ fingers: 2 })
             .onActionUpdate((event: GestureEvent) => {
-              this.scale *= event.scale;
+              this.zoomScale *= event.scale;
               this.renderWithDrawing();
             })
         )
@@ -99,103 +100,73 @@ export struct DrawingMapRenderer {
   private renderWithDrawing() {
     if (!this.context) return;
     
-    // In HarmonyOS NEXT, we can get the DrawContext from the Canvas
-    // and use the high-performance Drawing SDK
-    const canvas = this.context.getCanvas();
-    if (!canvas) {
-      // Fallback to normal canvas if Drawing SDK isn't available
-      this.renderNormalCanvas();
-      return;
-    }
-
     const width = this.context.width;
     const height = this.context.height;
 
-    // Clear background using Drawing
-    const brush = new drawing.Brush();
-    brush.setColor({ alpha: 255, red: 0, green: 0, blue: 0 });
-    canvas.attachBrush(brush);
-    canvas.drawRect({ left: 0, top: 0, right: width, bottom: height });
-    canvas.detachBrush();
-
-    // Setup Pen for roads
-    const penUntraveled = new drawing.Pen();
-    penUntraveled.setColor({ alpha: 255, red: 192, green: 28, blue: 40 }); // #c01c28
-    penUntraveled.setStrokeWidth(4 * this.scale);
-    penUntraveled.setJoinStyle(drawing.JoinStyle.ROUND);
-    penUntraveled.setCapStyle(drawing.CapStyle.ROUND);
-
-    const penTraveled = new drawing.Pen();
-    penTraveled.setColor({ alpha: 255, red: 71, green: 173, blue: 95 }); // #47ad5f
-    penTraveled.setStrokeWidth(4 * this.scale);
-    penTraveled.setJoinStyle(drawing.JoinStyle.ROUND);
-    penTraveled.setCapStyle(drawing.CapStyle.ROUND);
+    // Clear background
+    this.context.fillStyle = '#000000';
+    this.context.fillRect(0, 0, width, height);
 
     // Draw roads from cached tiles
     this.activeTiles.forEach(tileKey => {
       const tileData = this.tileCache.get(tileKey);
       if (!tileData) return;
 
-      tileData.features.forEach((feature: any) => {
+      tileData.features.forEach((feature: Feature<LineString, TileFeatureProperties>) => {
         if (feature.geometry.type === 'LineString') {
-          const path = new drawing.Path();
+          this.context.beginPath();
+          this.context.lineWidth = 4 * this.zoomScale;
+          this.context.lineCap = 'round';
+          this.context.lineJoin = 'round';
+          
           const coords = feature.geometry.coordinates;
           if (coords.length > 0) {
-            path.moveTo(this.lonToX(coords[0][0], width), this.latToY(coords[0][1], height));
+            this.context.moveTo(this.lonToX(coords[0][0], width), this.latToY(coords[0][1], height));
             for (let i = 1; i < coords.length; i++) {
-              path.lineTo(this.lonToX(coords[i][0], width), this.latToY(coords[i][1], height));
+              this.context.lineTo(this.lonToX(coords[i][0], width), this.latToY(coords[i][1], height));
             }
           }
 
           if (feature.properties.status === 'traveled') {
-            canvas.attachPen(penTraveled);
+            this.context.strokeStyle = '#47ad5f'; 
           } else {
-            canvas.attachPen(penUntraveled);
+            this.context.strokeStyle = '#c01c28'; 
           }
-          canvas.drawPath(path);
-          canvas.detachPen();
+          this.context.stroke();
         }
       });
     });
 
-    // Draw Breadcrumbs (Recorded Path) using Drawing SDK
-    const locationService = LocationService.getInstance(getContext(this) as common.UIAbilityContext);
+    // Draw Breadcrumbs (Recorded Path)
+    const context = getContext(this) as common.UIAbilityContext;
+    const locationService = LocationService.getInstance(context);
     const crumbs = locationService.getBreadcrumbs();
     
     if (crumbs.length > 1) {
-        const pathCrumb = new drawing.Path();
-        pathCrumb.moveTo(this.lonToX(crumbs[0].lon, width), this.latToY(crumbs[0].lat, height));
+        this.context.beginPath();
+        this.context.lineWidth = 3 * this.zoomScale;
+        this.context.strokeStyle = '#007aff';
+        this.context.lineCap = 'round';
+        this.context.lineJoin = 'round';
+        
+        this.context.moveTo(this.lonToX(crumbs[0].lon, width), this.latToY(crumbs[0].lat, height));
         for (let i = 1; i < crumbs.length; i++) {
-            pathCrumb.lineTo(this.lonToX(crumbs[i].lon, width), this.latToY(crumbs[i].lat, height));
+            this.context.lineTo(this.lonToX(crumbs[i].lon, width), this.latToY(crumbs[i].lat, height));
         }
-        
-        const penCrumb = new drawing.Pen();
-        penCrumb.setColor({ alpha: 255, red: 0, green: 122, blue: 255 }); // Blue
-        penCrumb.setStrokeWidth(3 * this.scale);
-        penCrumb.setJoinStyle(drawing.JoinStyle.ROUND);
-        penCrumb.setCapStyle(drawing.CapStyle.ROUND);
-        
-        canvas.attachPen(penCrumb);
-        canvas.drawPath(pathCrumb);
-        canvas.detachPen();
+        this.context.stroke();
     }
 
     // Draw GPS indicator
     const gpsX = width / 2 + this.offsetX;
     const gpsY = height / 2 + this.offsetY;
     
-    const gpsBrush = new drawing.Brush();
-    gpsBrush.setColor({ alpha: 255, red: 0, green: 122, blue: 255 });
-    canvas.attachBrush(gpsBrush);
-    canvas.drawCircle(gpsX, gpsY, 10);
-    canvas.detachBrush();
-    
-    const gpsPen = new drawing.Pen();
-    gpsPen.setColor({ alpha: 255, red: 255, green: 255, blue: 255 });
-    gpsPen.setStrokeWidth(3);
-    canvas.attachPen(gpsPen);
-    canvas.drawCircle(gpsX, gpsY, 10);
-    canvas.detachPen();
+    this.context.beginPath();
+    this.context.arc(gpsX, gpsY, 10, 0, Math.PI * 2);
+    this.context.fillStyle = '#007aff';
+    this.context.fill();
+    this.context.strokeStyle = '#ffffff';
+    this.context.lineWidth = 3;
+    this.context.stroke();
   }
 
   private renderNormalCanvas() {

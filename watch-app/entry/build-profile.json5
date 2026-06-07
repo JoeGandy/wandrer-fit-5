@@ -1,8 +1,5 @@
 {
-  "name": "entry",
-  "compileSdkVersion": 13,
-  "compatibleSdkVersion": 13,
-  "runtimeOS": "HarmonyOS",
+  "apiType": "stageMode",
   "targets": [
     {
       "name": "default"
